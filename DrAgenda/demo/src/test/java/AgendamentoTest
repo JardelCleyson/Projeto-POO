@@ -1,93 +1,101 @@
-package com.dragenda.model; 
-
-import org.junit.jupiter.api.BeforeEach; 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
-
-class AgendamentoTest {
-
-    private Unidade unidade;
-    private Paciente paciente;
-    private Medico medico;
-
-    @BeforeEach
-    void setUp() {
-        // Inicializando objetos fictícios para os testes
-        unidade = new Unidade("Clínica X", List.of("MONDAY", "TUESDAY", "WEDNESDAY"), 
-                              LocalTime.of(8, 0), LocalTime.of(18, 0));
-        paciente = new Paciente("João da Silva");
-        medico = new Medico("Dr. Ana", "12345");
-    }
-
-    @Test
-    void deveCriarAgendamentoValido() {
-        // Cenário válido: segunda-feira, 10h dentro do horário de funcionamento
-        Agendamento agendamento = new Agendamento(
-                1, unidade, paciente, medico, 
-                LocalDate.of(2024, 10, 28), LocalTime.of(10, 0), 
-                Agendamento.TipoConsulta.ROTINA
-        );
-
-        assertNotNull(agendamento);
-        assertEquals(1, agendamento.getId());
-        assertEquals(LocalDate.of(2024, 10, 28), agendamento.getDataConsulta());
-        assertEquals(LocalTime.of(10, 0), agendamento.getHoraConsulta());
-    }
-
-    @Test
-    void deveLancarExcecaoParaHorarioForaDoFuncionamento() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            new Agendamento(
-                2, unidade, paciente, medico, 
-                LocalDate.of(2024, 10, 28), LocalTime.of(19, 0), // Fora do horário
-                Agendamento.TipoConsulta.ROTINA
-            );
-        });
-
-        assertEquals("A consulta deve ser marcada dentro do horário de funcionamento da unidade.", 
-                     exception.getMessage());
-    }
-
-    @Test
-    void deveLancarExcecaoParaDiaForaDoFuncionamento() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            new Agendamento(
-                3, unidade, paciente, medico, 
-                LocalDate.of(2024, 10, 29), LocalTime.of(10, 0), // Terça, fora do dia permitido
-                Agendamento.TipoConsulta.ROTINA
-            );
-        });
-
-        assertEquals("A unidade não funciona no dia TUESDAY.", exception.getMessage());
-    }
-
-    @Test
-    void deveLancarExcecaoQuandoLocalCirurgiaInvalido() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            new Agendamento(
-                4, unidade, paciente, medico, 
-                LocalDate.of(2024, 10, 28), LocalTime.of(10, 0), 
-                Agendamento.TipoConsulta.RETORNO, "Bloco A"
-            );
-        });
-
-        assertEquals("Local de cirurgia só pode ser definido para consultas do tipo CIRURGIA.", 
-                     exception.getMessage());
-    }
-
-    @Test
-    void deveCriarAgendamentoDeCirurgiaComLocalValido() {
-        Agendamento agendamento = new Agendamento(
-                5, unidade, paciente, medico, 
-                LocalDate.of(2024, 10, 28), LocalTime.of(10, 0), 
-                Agendamento.TipoConsulta.CIRURGIA, "Bloco A"
-        );
-
-        assertNotNull(agendamento);
-        assertEquals("Bloco A", agendamento.getLocalCirurgia());
-    }
+package com.dragenda.model;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+
+
+
+public class AgendamentoTest {
+
+    private Unidade unidade;
+    private Paciente paciente;
+    private Medico medico;
+
+    @BeforeEach
+    public void setUp() {
+        unidade = new Unidade(1, "Unidade A", "Endereço A", LocalTime.of(8, 0), LocalTime.of(18, 0), Arrays.asList("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"));
+        unidade.setDiasFuncionamento(Arrays.asList("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"));
+        unidade.setHorarioAbertura(LocalTime.of(8, 0));
+        unidade.setHorarioFechamento(LocalTime.of(18, 0));
+
+        paciente = new Paciente(1, "Paciente A", "12345678911", unidade);
+        medico = new Medico(1, "Medico A", "98765432121", "12354", "Especialidade A", unidade);
+    }
+
+    @Test
+    public void testAgendamentoValido() {
+        LocalDate dataConsulta = LocalDate.of(2023, 10, 2); // Monday
+        LocalTime horaConsulta = LocalTime.of(10, 0);
+
+        Agendamento agendamento = new Agendamento(1, unidade, paciente, medico, dataConsulta, horaConsulta, Agendamento.TipoConsulta.ROTINA);
+
+        assertEquals(1, agendamento.getId());
+        assertEquals(unidade, agendamento.getUnidade());
+        assertEquals(paciente, agendamento.getPaciente());
+        assertEquals(medico, agendamento.getMedico());
+        assertEquals(dataConsulta, agendamento.getDataConsulta());
+        assertEquals(horaConsulta, agendamento.getHoraConsulta());
+        assertEquals(Agendamento.TipoConsulta.ROTINA, agendamento.getTipoConsulta());
+    }
+
+    @Test
+    public void testAgendamentoInvalidoDiaSemana() {
+        LocalDate dataConsulta = LocalDate.of(2023, 10, 1); // Sunday
+        LocalTime horaConsulta = LocalTime.of(10, 0);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Agendamento(1, unidade, paciente, medico, dataConsulta, horaConsulta, Agendamento.TipoConsulta.ROTINA);
+        });
+
+        assertEquals("A unidade não funciona no dia SUNDAY.", exception.getMessage());
+    }
+
+    @Test
+    public void testAgendamentoInvalidoHorario() {
+        LocalDate dataConsulta = LocalDate.of(2023, 10, 2); // Monday
+        LocalTime horaConsulta = LocalTime.of(7, 0);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Agendamento(1, unidade, paciente, medico, dataConsulta, horaConsulta, Agendamento.TipoConsulta.ROTINA);
+        });
+
+        assertEquals("A consulta deve ser marcada dentro do horário de funcionamento da unidade.", exception.getMessage());
+    }
+
+    @Test
+    public void testAgendamentoCirurgiaValido() {
+        LocalDate dataConsulta = LocalDate.of(2023, 10, 2); // Monday
+        LocalTime horaConsulta = LocalTime.of(10, 0);
+        String localCirurgia = "Sala 1";
+
+        Agendamento agendamento = new Agendamento(1, unidade, paciente, medico, dataConsulta, horaConsulta, Agendamento.TipoConsulta.CIRURGIA, localCirurgia);
+
+        assertEquals(1, agendamento.getId());
+        assertEquals(unidade, agendamento.getUnidade());
+        assertEquals(paciente, agendamento.getPaciente());
+        assertEquals(medico, agendamento.getMedico());
+        assertEquals(dataConsulta, agendamento.getDataConsulta());
+        assertEquals(horaConsulta, agendamento.getHoraConsulta());
+        assertEquals(Agendamento.TipoConsulta.CIRURGIA, agendamento.getTipoConsulta());
+        assertEquals(localCirurgia, agendamento.getLocalCirurgia());
+    }
+
+    @Test
+    public void testAgendamentoCirurgiaInvalido() {
+        LocalDate dataConsulta = LocalDate.of(2023, 10, 2); // Monday
+        LocalTime horaConsulta = LocalTime.of(10, 0);
+        String localCirurgia = "Sala 1";
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Agendamento(1, unidade, paciente, medico, dataConsulta, horaConsulta, Agendamento.TipoConsulta.ROTINA, localCirurgia);
+        });
+
+        assertEquals("Local de cirurgia só pode ser definido para consultas do tipo CIRURGIA.", exception.getMessage());
+    }
 }

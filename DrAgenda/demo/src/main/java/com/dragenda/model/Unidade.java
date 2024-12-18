@@ -4,78 +4,91 @@ import java.time.LocalTime;
 import java.util.List;
 
 public class Unidade {
-    private int id; // Adicionando um atributo para ID da Unidade
-    private String nome; // Nome da Unidade
-    private String endereco; // Endereço da Unidade
-    private LocalTime horarioAbertura; // Horário de Abertura
-    private LocalTime horarioFechamento; // Horário de Fechamento
-    private List<String> diasFuncionamento; // Dias de Funcionamento
+    private int id; 
+    private String nome; 
+    private String endereco; 
+    private LocalTime horarioAbertura; 
+    private LocalTime horarioFechamento; 
+    private List<String> diasFuncionamento; 
 
     // Construtor com ID
     public Unidade(int id, String nome, String endereco, LocalTime horarioAbertura, LocalTime horarioFechamento, List<String> diasFuncionamento) {
-        this.id = id; // Inicializa o ID
-        this.nome = nome; // Inicializa o Nome
-        this.endereco = endereco; // Inicializa o Endereço
-        this.horarioAbertura = horarioAbertura; // Inicializa o Horário de Abertura
-        this.horarioFechamento = horarioFechamento; // Inicializa o Horário de Fechamento
-        this.diasFuncionamento = diasFuncionamento; // Inicializa os Dias de Funcionamento
+        this.id = id;
+        this.nome = nome;
+        this.endereco = endereco;
+        this.horarioAbertura = horarioAbertura;
+        this.horarioFechamento = horarioFechamento;
+        this.diasFuncionamento = diasFuncionamento;
     }
 
     // Construtor sem ID (para inserção)
     public Unidade(String nome, String endereco, LocalTime horarioAbertura, LocalTime horarioFechamento, List<String> diasFuncionamento) {
-        this.nome = nome; // Inicializa o Nome
-        this.endereco = endereco; // Inicializa o Endereço
-        this.horarioAbertura = horarioAbertura; // Inicializa o Horário de Abertura
-        this.horarioFechamento = horarioFechamento; // Inicializa o Horário de Fechamento
-        this.diasFuncionamento = diasFuncionamento; // Inicializa os Dias de Funcionamento
+        this.nome = nome;
+        this.endereco = endereco;
+        this.horarioAbertura = horarioAbertura;
+        this.horarioFechamento = horarioFechamento;
+        this.diasFuncionamento = diasFuncionamento;
+    }
+
+    // Sobrescrevendo o método toString()
+    @Override
+    public String toString() {
+        return "Unidade{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", endereco='" + endereco + '\'' +
+                ", horarioAbertura=" + horarioAbertura +
+                ", horarioFechamento=" + horarioFechamento +
+                ", diasFuncionamento=" + diasFuncionamento +
+                '}';
     }
 
     // Getters e Setters
     public int getId() {
-        return id; // Retorna o ID
+        return id;
     }
 
     public void setId(int id) {
-        this.id = id; // Define o ID
+        this.id = id;
     }
 
     public String getNome() {
-        return nome; // Retorna o Nome
+        return nome;
     }
 
     public void setNome(String nome) {
-        this.nome = nome; // Define o Nome
+        this.nome = nome;
     }
 
     public String getEndereco() {
-        return endereco; // Retorna o Endereço
+        return endereco;
     }
 
     public void setEndereco(String endereco) {
-        this.endereco = endereco; // Define o Endereço
+        this.endereco = endereco;
     }
 
     public LocalTime getHorarioAbertura() {
-        return horarioAbertura; // Retorna o Horário de Abertura
+        return horarioAbertura;
     }
 
     public void setHorarioAbertura(LocalTime horarioAbertura) {
-        this.horarioAbertura = horarioAbertura; // Define o Horário de Abertura
+        this.horarioAbertura = horarioAbertura;
     }
 
     public LocalTime getHorarioFechamento() {
-        return horarioFechamento; // Retorna o Horário de Fechamento
+        return horarioFechamento;
     }
 
     public void setHorarioFechamento(LocalTime horarioFechamento) {
-        this.horarioFechamento = horarioFechamento; // Define o Horário de Fechamento
+        this.horarioFechamento = horarioFechamento;
     }
 
     public List<String> getDiasFuncionamento() {
-        return diasFuncionamento; // Retorna os Dias de Funcionamento
+        return diasFuncionamento;
     }
 
     public void setDiasFuncionamento(List<String> diasFuncionamento) {
-        this.diasFuncionamento = diasFuncionamento; // Define os Dias de Funcionamento
+        this.diasFuncionamento = diasFuncionamento;
     }
 }

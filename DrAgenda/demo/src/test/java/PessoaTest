@@ -1,69 +1,58 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
 package com.dragenda.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 class PessoaTest {
 
-    // Classe interna fictícia para testar a classe abstrata Pessoa
-    static class PessoaFicticia extends Pessoa {
-        public PessoaFicticia(String nomeCompleto, String cpf) {
+    // Classe concreta para testar a classe abstrata Pessoa
+    class PessoaConcreta extends Pessoa {
+        public PessoaConcreta(String nomeCompleto, String cpf) {
             super(nomeCompleto, cpf);
         }
 
         @Override
         public String getTipoPessoa() {
-            return "FICTICIA";
+            return "Concreta";
         }
     }
 
-    private Pessoa pessoa;
-
-    @BeforeEach
-    void setup() {
-        pessoa = new PessoaFicticia("Maria Oliveira", "12345678901");
-    }
-
     @Test
-    void testConstrutorPessoa() {
-        assertEquals("Maria Oliveira", pessoa.getNomeCompleto());
+    void testPessoaCreation() {
+        Pessoa pessoa = new PessoaConcreta("João Silva", "12345678901");
+        assertEquals("João Silva", pessoa.getNomeCompleto());
         assertEquals("12345678901", pessoa.getCpf());
     }
 
     @Test
+    void testInvalidCPF() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new PessoaConcreta("João Silva", "123");
+        });
+        assertEquals("CPF inválido.", exception.getMessage());
+    }
+
+    @Test
     void testSetNomeCompleto() {
-        pessoa.setNomeCompleto("João Silva");
-        assertEquals("João Silva", pessoa.getNomeCompleto());
+        Pessoa pessoa = new PessoaConcreta("João Silva", "12345678901");
+        pessoa.setNomeCompleto("Maria Oliveira");
+        assertEquals("Maria Oliveira", pessoa.getNomeCompleto());
     }
 
     @Test
-    void testSetCpfValido() {
-        pessoa.setCpf("09876543210");
-        assertEquals("09876543210", pessoa.getCpf());
+    void testSetCpf() {
+        Pessoa pessoa = new PessoaConcreta("João Silva", "12345678901");
+        pessoa.setCpf("10987654321");
+        assertEquals("10987654321", pessoa.getCpf());
     }
 
     @Test
-    void testSetCpfInvalido() {
-        IllegalArgumentException exception = assertThrows(
-            IllegalArgumentException.class,
-            () -> pessoa.setCpf("12345")
-        );
+    void testSetInvalidCpf() {
+        Pessoa pessoa = new PessoaConcreta("João Silva", "12345678901");
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            pessoa.setCpf("123");
+        });
         assertEquals("CPF inválido.", exception.getMessage());
-    }
-
-    @Test
-    void testConstrutorCpfInvalido() {
-        IllegalArgumentException exception = assertThrows(
-            IllegalArgumentException.class,
-            () -> new PessoaFicticia("Carlos Souza", "999")
-        );
-        assertEquals("CPF inválido.", exception.getMessage());
-    }
-
-    @Test
-    void testGetTipoPessoa() {
-        assertEquals("FICTICIA", pessoa.getTipoPessoa());
     }
 }

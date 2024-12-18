@@ -1,72 +1,55 @@
+import org.junit.jupiter.api.Test;
+import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
+
 package com.dragenda.model;
 
-import java.time.LocalTime;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-class UnidadeTest {
-
-    private Unidade unidade;
-
-    @BeforeEach
-    void setup() {
-        unidade = new Unidade(
-            1, 
-            "Clínica Central", 
-            "Rua das Flores, 123", 
-            LocalTime.of(8, 0), 
-            LocalTime.of(18, 0), 
-            List.of("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY")
-        );
-    }
+public class UnidadeTest {
 
     @Test
-    void testConstrutorComId() {
+    public void testUnidadeConstructorWithId() {
+        List<String> diasFuncionamento = Arrays.asList("Segunda", "Terça", "Quarta");
+        Unidade unidade = new Unidade(1, "Unidade A", "Rua A", LocalTime.of(8, 0), LocalTime.of(18, 0), diasFuncionamento);
+
         assertEquals(1, unidade.getId());
-        assertEquals("Clínica Central", unidade.getNome());
-        assertEquals("Rua das Flores, 123", unidade.getEndereco());
+        assertEquals("Unidade A", unidade.getNome());
+        assertEquals("Rua A", unidade.getEndereco());
         assertEquals(LocalTime.of(8, 0), unidade.getHorarioAbertura());
         assertEquals(LocalTime.of(18, 0), unidade.getHorarioFechamento());
-        assertIterableEquals(List.of("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"), unidade.getDiasFuncionamento());
+        assertEquals(diasFuncionamento, unidade.getDiasFuncionamento());
     }
 
     @Test
-    void testSetNome() {
-        unidade.setNome("Nova Clínica");
-        assertEquals("Nova Clínica", unidade.getNome());
-    }
+    public void testUnidadeConstructorWithoutId() {
+        List<String> diasFuncionamento = Arrays.asList("Segunda", "Terça", "Quarta");
+        Unidade unidade = new Unidade("Unidade B", "Rua B", LocalTime.of(9, 0), LocalTime.of(17, 0), diasFuncionamento);
 
-    @Test
-    void testSetEndereco() {
-        unidade.setEndereco("Avenida Principal, 456");
-        assertEquals("Avenida Principal, 456", unidade.getEndereco());
-    }
-
-    @Test
-    void testSetHorarioAbertura() {
-        unidade.setHorarioAbertura(LocalTime.of(9, 0));
+        assertEquals("Unidade B", unidade.getNome());
+        assertEquals("Rua B", unidade.getEndereco());
         assertEquals(LocalTime.of(9, 0), unidade.getHorarioAbertura());
-    }
-
-    @Test
-    void testSetHorarioFechamento() {
-        unidade.setHorarioFechamento(LocalTime.of(17, 0));
         assertEquals(LocalTime.of(17, 0), unidade.getHorarioFechamento());
+        assertEquals(diasFuncionamento, unidade.getDiasFuncionamento());
     }
 
     @Test
-    void testSetDiasFuncionamento() {
-        unidade.setDiasFuncionamento(List.of("SATURDAY", "SUNDAY"));
-        assertIterableEquals(List.of("SATURDAY", "SUNDAY"), unidade.getDiasFuncionamento());
-    }
+    public void testSettersAndGetters() {
+        Unidade unidade = new Unidade("Unidade C", "Rua C", LocalTime.of(10, 0), LocalTime.of(16, 0), Arrays.asList("Quinta", "Sexta"));
 
-    @Test
-    void testSetId() {
         unidade.setId(2);
+        unidade.setNome("Unidade D");
+        unidade.setEndereco("Rua D");
+        unidade.setHorarioAbertura(LocalTime.of(7, 0));
+        unidade.setHorarioFechamento(LocalTime.of(15, 0));
+        unidade.setDiasFuncionamento(Arrays.asList("Sábado", "Domingo"));
+
         assertEquals(2, unidade.getId());
+        assertEquals("Unidade D", unidade.getNome());
+        assertEquals("Rua D", unidade.getEndereco());
+        assertEquals(LocalTime.of(7, 0), unidade.getHorarioAbertura());
+        assertEquals(LocalTime.of(15, 0), unidade.getHorarioFechamento());
+        assertEquals(Arrays.asList("Sábado", "Domingo"), unidade.getDiasFuncionamento());
     }
 }

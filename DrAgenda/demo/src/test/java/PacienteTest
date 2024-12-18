@@ -1,82 +1,63 @@
-package com.dragenda.model;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalTime;
+import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+package com.dragenda.model;
 
-class PacienteTest {
+
+
+public class PacienteTest {
 
     private Paciente paciente;
     private Unidade unidade;
 
     @BeforeEach
-    void setup() {
-        unidade = new Unidade(
-            1, 
-            "Clínica Central", 
-            "Rua das Flores, 123", 
-            LocalTime.of(8, 0), 
-            LocalTime.of(18, 0), 
-            List.of("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY")
-        );
-
-        paciente = new Paciente(1, "João da Silva", "123.456.789-00", unidade);
+    public void setUp() {
+        unidade = new Unidade("Unidade Teste");
+        paciente = new Paciente(1, "Nome Completo", "123.456.789-00", unidade);
     }
 
     @Test
-    void testConstrutorPaciente() {
+    public void testGetTipoPessoa() {
+        assertEquals("PACIENTE", paciente.getTipoPessoa());
+    }
+
+    @Test
+    public void testAdicionarPatologia() {
+        paciente.adicionarPatologia("Gripe", "01/01/2023");
+        List<String> historico = paciente.getHistoricoPatologias();
+        assertEquals(1, historico.size());
+        assertEquals("Consulta dia 01/01/2023 - Patologia: Gripe", historico.get(0));
+    }
+
+    @Test
+    public void testGetId() {
         assertEquals(1, paciente.getId());
-        assertEquals("João da Silva", paciente.getNomeCompleto());
-        assertEquals("123.456.789-00", paciente.getCpf());
-        assertEquals(unidade, paciente.getUnidadePreferencia());
-        assertTrue(paciente.getHistoricoPatologias().isEmpty());
     }
 
     @Test
-    void testSetId() {
+    public void testSetId() {
         paciente.setId(2);
         assertEquals(2, paciente.getId());
     }
 
     @Test
-    void testSetUnidadePreferencia() {
-        Unidade novaUnidade = new Unidade(
-            2, 
-            "Clínica Oeste", 
-            "Avenida Brasil, 456", 
-            LocalTime.of(9, 0), 
-            LocalTime.of(17, 0), 
-            List.of("MONDAY", "WEDNESDAY", "FRIDAY")
-        );
+    public void testGetUnidadePreferencia() {
+        assertEquals(unidade, paciente.getUnidadePreferencia());
+    }
 
+    @Test
+    public void testSetUnidadePreferencia() {
+        Unidade novaUnidade = new Unidade("Nova Unidade");
         paciente.setUnidadePreferencia(novaUnidade);
         assertEquals(novaUnidade, paciente.getUnidadePreferencia());
     }
 
     @Test
-    void testAdicionarPatologia() {
-        String dataConsulta = "2024-10-25";
-        String patologia = "Gripe";
-
-        paciente.adicionarPatologia(patologia, dataConsulta);
-        List<String> historico = paciente.getHistoricoPatologias();
-
-        assertEquals(1, historico.size());
-        assertEquals("Consulta dia 2024-10-25 - Patologia: Gripe", historico.get(0));
-    }
-
-    @Test
-    void testAdicionarVariasPatologias() {
-        paciente.adicionarPatologia("Gripe", "2024-10-25");
-        paciente.adicionarPatologia("Dengue", "2024-10-30");
-
-        List<String> historico = paciente.getHistoricoPatologias();
-        assertEquals(2, historico.size());
-        assertEquals("Consulta dia 2024-10-25 - Patologia: Gripe", historico.get(0));
-        assertEquals("Consulta dia 2024-10-30 - Patologia: Dengue", historico.get(1));
+    public void testGetHistoricoPatologias() {
+        assertTrue(paciente.getHistoricoPatologias().isEmpty());
+        paciente.adicionarPatologia("Gripe", "01/01/2023");
+        assertFalse(paciente.getHistoricoPatologias().isEmpty());
     }
 }

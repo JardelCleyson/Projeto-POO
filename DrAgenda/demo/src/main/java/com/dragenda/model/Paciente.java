@@ -26,6 +26,17 @@ public class Paciente extends Pessoa {
         historicoPatologias.add(registro);
     }
 
+    @Override
+    public String toString() {
+        return "Paciente{" +
+                "id=" + id +
+                ", nomeCompleto='" + getNomeCompleto() + '\'' +
+                ", cpf='" + getCpf() + '\'' +
+                ", unidadePreferencia=" + unidadePreferencia +
+                ", historicoPatologias=" + historicoPatologias +
+                '}';
+    }
+
     // Getters e Setters
     public int getId() { // Método getId adicionado
         return id;

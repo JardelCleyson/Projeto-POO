@@ -20,6 +20,14 @@ public abstract class Pessoa {
         }
         // Podemos adicionar uma lógica mais robusta de validação aqui.
     }
+    
+    @Override
+    public String toString() {
+        return "Pessoa{" +
+                "nomeCompleto='" + nomeCompleto + '\'' +
+                ", cpf='" + cpf + '\'' +
+                '}';
+    }
 
     // Getters e Setters
     public String getNomeCompleto() {

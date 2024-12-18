@@ -26,6 +26,18 @@ public class Medico extends Pessoa {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Medico{" +
+                "id=" + id +
+                ", nomeCompleto='" + getNomeCompleto() + '\'' +
+                ", cpf='" + getCpf() + '\'' +
+                ", crm='" + crm + '\'' +
+                ", especialidade='" + especialidade + '\'' +
+                ", unidadeVinculada=" + unidadeVinculada.getNome() +
+                '}';
+    }
+
     // Getters e Setters
     public int getId() { // Método getId adicionado
         return id;

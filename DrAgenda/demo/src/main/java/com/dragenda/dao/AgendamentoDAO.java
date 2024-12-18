@@ -54,75 +54,149 @@ public class AgendamentoDAO {
         }
     }
 
-    // Método para buscar todos os Agendamentos
+
+
+
     public List<Agendamento> buscarAgendamentos() {
-         String sql ="SELECT Agendamentos.id AS agendamento_id, " +
-                 "Unidade.nome AS unidade_nome, " +
-                 "Paciente.nome AS paciente_nome, " +
-                 "Medico.nome AS medico_nome, " +
-                 "Agendamentos.data_consulta, " +
-                 "Agendamentos.hora_consulta, " +
-                 "Agendamentos.tipo_consulta " +
+    String sql = "SELECT Agendamentos.id AS agendamento_id, " +
+                 "Unidade.id AS unidade_id, Unidade.nome AS unidade_nome, Unidade.endereco AS unidade_endereco, " +
+                 "Unidade.horario_abertura, Unidade.horario_fechamento, Unidade.dias_funcionamento, " +
+                 "Paciente.id AS paciente_id, Paciente.nome AS paciente_nome, Paciente.cpf AS paciente_cpf, " +
+                 "Medico.id AS medico_id, Medico.nome AS medico_nome, Medico.cpf AS medico_cpf, " +
+                 "Medico.crm AS medico_crm, Medico.especialidade AS medico_especialidade, " +
+                 "Agendamentos.data_consulta, Agendamentos.hora_consulta, Agendamentos.tipo_consulta, " +
+                 "Agendamentos.local_cirurgia " +
                  "FROM Agendamentos " +
                  "JOIN Unidade ON Agendamentos.unidade_id = Unidade.id " +
                  "JOIN Paciente ON Agendamentos.paciente_id = Paciente.id " +
                  "JOIN Medico ON Agendamentos.medico_id = Medico.id";
-         // "SELECT * FROM Agendamentos " +
-        //              "JOIN Unidade ON Agendamentos.unidade_id = unidade_id " +
-        //              "JOIN Paciente ON Agendamentos.paciente_id = paciente_id " +
-        //              "JOIN Medico ON Agendamentos.medico_id = medico_id";
 
-        List<Agendamento> Agendamentos = new ArrayList<>();
-        
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
-            
-            while (rs.next()) {
-                // Criar objetos Unidade, Paciente e Médico a partir do ResultSet
-                Unidade unidade = new Unidade(
-                        rs.getInt("unidade_id"),
-                        rs.getString("unidade_nome"), // Nome da unidade
-                        "", // Endereço não está sendo buscado
-                        null, // Horário de abertura não está sendo buscado
-                        null, // Horário de fechamento não está sendo buscado
-                        null // Dias de funcionamento não estão sendo buscados
-                );
-                Paciente paciente = new Paciente(
-                        rs.getInt("paciente_id"),
-                        rs.getString("paciente_nome"),
-                        "", // CPF não está sendo buscado
-                        unidade // A unidade preferida
-                );
-                Medico medico = new Medico(
-                        rs.getInt("medico_id"),
-                        rs.getString("medico_nome"),
-                        "", // CPF não está sendo buscado
-                        "", // CRM não está sendo buscado
-                        "", // Especialidade não está sendo buscada
-                        unidade // A unidade vinculada
-                );
+    List<Agendamento> agendamentos = new ArrayList<>();
 
-                // Criar o agendamento
-                Agendamento agendamento = new Agendamento(
-                        rs.getInt("id"),
-                        unidade,
-                        paciente,
-                        medico,
-                        rs.getDate("data_consulta").toLocalDate(),
-                        rs.getTime("hora_consulta").toLocalTime(),
-                        Agendamento.TipoConsulta.valueOf(rs.getString("tipo_consulta")),
-                        rs.getString("local_cirurgia")
-                );
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql);
+         ResultSet rs = pstmt.executeQuery()) {
 
-                Agendamentos.add(agendamento);// Adiciona o agendamento à lista
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar Agendamentos: " + e.getMessage(), e);
+        while (rs.next()) {
+            // Criar objeto Unidade
+            Unidade unidade = new Unidade(
+                    rs.getInt("unidade_id"),
+                    rs.getString("unidade_nome"),
+                    rs.getString("unidade_endereco"),
+                    rs.getTime("horario_abertura").toLocalTime(),
+                    rs.getTime("horario_fechamento").toLocalTime(),
+                    List.of(rs.getString("dias_funcionamento").split(","))
+            );
+
+            // Criar objeto Paciente
+            Paciente paciente = new Paciente(
+                    rs.getInt("paciente_id"),
+                    rs.getString("paciente_nome"),
+                    rs.getString("paciente_cpf"),
+                    unidade
+            );
+
+            // Criar objeto Médico
+            Medico medico = new Medico(
+                    rs.getInt("medico_id"),
+                    rs.getString("medico_nome"),
+                    rs.getString("medico_cpf"),
+                    rs.getString("medico_crm"),
+                    rs.getString("medico_especialidade"),
+                    unidade
+            );
+
+            // Criar objeto Agendamento
+            Agendamento agendamento = new Agendamento(
+                    rs.getInt("agendamento_id"),
+                    unidade,
+                    paciente,
+                    medico,
+                    rs.getDate("data_consulta").toLocalDate(),
+                    rs.getTime("hora_consulta").toLocalTime(),
+                    Agendamento.TipoConsulta.valueOf(rs.getString("tipo_consulta").toUpperCase())
+                    //rs.getString("tipo_consulta").equalsIgnoreCase("CIRURGIA") ? rs.getString("local_cirurgia") : null // Local de cirurgia apenas para CIRURGIA
+            );
+
+            agendamentos.add(agendamento); // Adicionar à lista
         }
-
-        return Agendamentos;
+    } catch (SQLException e) {
+        throw new RuntimeException("Erro ao buscar agendamentos: " + e.getMessage(), e);
     }
+
+    return agendamentos;
+}
+
+    // Método para buscar todos os Agendamentos
+    // public List<Agendamento> buscarAgendamentos() {
+    //      String sql =
+    //      "SELECT Agendamentos.id AS agendamento_id, " +
+    //              "Unidade.nome AS unidade_nome, " +
+    //              "Paciente.nome AS paciente_nome, " +
+    //              "Medico.nome AS medico_nome, " +
+    //              "Agendamentos.data_consulta, " +
+    //              "Agendamentos.hora_consulta, " +
+    //              "Agendamentos.tipo_consulta " +
+    //              "FROM Agendamentos " +
+    //              "JOIN Unidade ON Agendamentos.unidade_id = Unidade.id " +
+    //              "JOIN Paciente ON Agendamentos.paciente_id = Paciente.id " +
+    //              "JOIN Medico ON Agendamentos.medico_id = Medico.id";
+    //      // "SELECT * FROM Agendamentos " +
+    //     //              "JOIN Unidade ON Agendamentos.unidade_id = unidade_id " +
+    //     //              "JOIN Paciente ON Agendamentos.paciente_id = paciente_id " +
+    //     //              "JOIN Medico ON Agendamentos.medico_id = medico_id";
+
+    //     List<Agendamento> Agendamentos = new ArrayList<>();
+        
+    //     try (Connection conn = DatabaseConnection.getConnection();
+    //          PreparedStatement pstmt = conn.prepareStatement(sql);
+    //          ResultSet rs = pstmt.executeQuery()) {
+            
+    //         while (rs.next()) {
+    //             // Criar objetos Unidade, Paciente e Médico a partir do ResultSet
+    //             Unidade unidade = new Unidade(
+    //                     rs.getInt("unidade_id"),
+    //                     rs.getString("unidade_nome"), // Nome da unidade
+    //                     "", // Endereço não está sendo buscado
+    //                     null, // Horário de abertura não está sendo buscado
+    //                     null, // Horário de fechamento não está sendo buscado
+    //                     null // Dias de funcionamento não estão sendo buscados
+    //             );
+    //             Paciente paciente = new Paciente(
+    //                     rs.getInt("paciente_id"),
+    //                     rs.getString("paciente_nome"),
+    //                     "", // CPF não está sendo buscado
+    //                     unidade // A unidade preferida
+    //             );
+    //             Medico medico = new Medico(
+    //                     rs.getInt("medico_id"),
+    //                     rs.getString("medico_nome"),
+    //                     "", // CPF não está sendo buscado
+    //                     "", // CRM não está sendo buscado
+    //                     "", // Especialidade não está sendo buscada
+    //                     unidade // A unidade vinculada
+    //             );
+
+    //             // Criar o agendamento
+    //             Agendamento agendamento = new Agendamento(
+    //                     rs.getInt("id"),
+    //                     unidade,
+    //                     paciente,
+    //                     medico,
+    //                     rs.getDate("data_consulta").toLocalDate(),
+    //                     rs.getTime("hora_consulta").toLocalTime(),
+    //                     Agendamento.TipoConsulta.valueOf(rs.getString("tipo_consulta")),
+    //                     rs.getString("local_cirurgia")
+    //             );
+
+    //             Agendamentos.add(agendamento);// Adiciona o agendamento à lista
+    //         }
+    //     } catch (SQLException e) {
+    //         throw new RuntimeException("Erro ao buscar Agendamentos: " + e.getMessage(), e);
+    //     }
+
+    //     return Agendamentos;
+    // }
 
     // Método para atualizar um agendamento
     public void atualizarAgendamento(Agendamento agendamento) {

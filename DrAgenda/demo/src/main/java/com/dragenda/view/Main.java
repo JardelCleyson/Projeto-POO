@@ -1,16 +1,5 @@
 package com.dragenda.view;
 
-import com.dragenda.dao.AgendamentoDAO;
-import com.dragenda.dao.MedicoDAO;
-import com.dragenda.dao.PacienteDAO;
-import com.dragenda.dao.UnidadeDAO;
-import com.dragenda.model.Agendamento;
-import com.dragenda.model.Medico;
-import com.dragenda.model.Paciente;
-import com.dragenda.model.Unidade;
-import com.dragenda.util.DatabaseConnection;
-import com.dragenda.util.DatabaseInitializer;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -20,6 +9,16 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.dragenda.dao.AgendamentoDAO;
+import com.dragenda.dao.MedicoDAO;
+import com.dragenda.dao.PacienteDAO;
+import com.dragenda.dao.UnidadeDAO;
+import com.dragenda.model.Agendamento;
+import com.dragenda.model.Medico;
+import com.dragenda.model.Paciente;
+import com.dragenda.model.Unidade;
+import com.dragenda.util.DatabaseConnection;
+
 public class Main {
     private static final Logger logger = Logger.getLogger(Main.class.getName());
     private static final Scanner scanner = new Scanner(System.in);
@@ -27,10 +26,11 @@ public class Main {
     private static final MedicoDAO medicoDAO = new MedicoDAO();
     private static final PacienteDAO pacienteDAO = new PacienteDAO();
     private static final AgendamentoDAO agendamentoDAO = new AgendamentoDAO();
+   
 
     public static void main(String[] args) {
         try (Connection connection = DatabaseConnection.getConnection()) {
-            DatabaseInitializer.initializeDatabase();
+            // DatabaseInitializer.initializeDatabase();
             logger.info("Database initialized successfully.");
 
             boolean continuar = true;
@@ -55,6 +55,7 @@ public class Main {
                         break;
                     case 5:
                         exibirUnidades();
+                        
                         break;
                     case 6:
                         exibirMedicos();
@@ -238,7 +239,10 @@ public class Main {
     }
 
     // Método para agendar uma nova consulta
-    private static void agendarConsulta() {
+    
+private static void agendarConsulta() {
+    try {
+        // Escolha do paciente
         System.out.print("Escolha o paciente (Digite o ID ou 0 para cancelar): ");
         List<Paciente> pacientes = pacienteDAO.getAll();
         exibirPacientes(pacientes);
@@ -251,6 +255,7 @@ public class Main {
 
         Paciente paciente = pacientes.get(pacienteEscolhido - 1);
 
+        // Escolha do médico
         System.out.print("Escolha o médico (Digite o ID ou 0 para cancelar): ");
         List<Medico> medicos = medicoDAO.getAll();
         exibirMedicos(medicos);
@@ -263,15 +268,31 @@ public class Main {
 
         Medico medico = medicos.get(medicoEscolhido - 1);
 
-        // Verifica se o médico possui uma unidade vinculada
-        if (medico.getUnidadeVinculada() == null) {
-            System.out.println("O médico selecionado não está vinculado a nenhuma unidade.");
+        // Solicitação do ID da unidade
+        System.out.println("Escolha a unidade (Digite o ID ou 0 para cancelar): ");
+        List<Unidade> unidades = unidadeDAO.getAll();        
+        exibirUnidades(unidades); // Método para exibir a lista de unidades          
+        int unidadeEscolhida = obterOpcaoUsuario();
+        if (unidadeEscolhida == 0) {
+            System.out.println("Agendamento cancelado.");
             return;
         }
 
+        Unidade unidade = unidades.stream()
+                .filter(u -> u.getId() == unidadeEscolhida)
+                .findFirst()
+                .orElse(null);
+
+        if (unidade == null) {
+            System.out.println("Unidade inválida! Agendamento cancelado.");
+            return;
+        }
+
+        // Data e hora da consulta
         LocalDate dataConsulta = obterDataConsulta();
         LocalTime horaConsulta = obterHorario("hora da consulta (HH:mm)");
 
+        // Tipo de consulta
         System.out.print("Digite o tipo de consulta (ROTINA, CIRURGIA, RETORNO): ");
         Agendamento.TipoConsulta tipoConsulta;
         while (true) {
@@ -283,15 +304,77 @@ public class Main {
             }
         }
 
+        // Criar agendamento
         Agendamento agendamento = tipoConsulta == Agendamento.TipoConsulta.CIRURGIA
-                ? new Agendamento(0, medico.getUnidadeVinculada(), paciente, medico, dataConsulta, horaConsulta,
+                ? new Agendamento(0, unidade, paciente, medico, dataConsulta, horaConsulta,
                         tipoConsulta, "Local Cirurgia")
-                : new Agendamento(0, medico.getUnidadeVinculada(), paciente, medico, dataConsulta, horaConsulta,
+                : new Agendamento(0, unidade, paciente, medico, dataConsulta, horaConsulta,
                         tipoConsulta);
 
         agendamentoDAO.inserirAgendamento(agendamento);
         System.out.println("Consulta agendada com sucesso!");
+    } catch (Exception e) {
+        System.out.println("Erro ao agendar consulta. Tente novamente.");
+        logger.log(Level.SEVERE, "Erro ao agendar consulta", e);
     }
+}
+
+
+
+    // private static void agendarConsulta() {
+    //     System.out.print("Escolha o paciente (Digite o ID ou 0 para cancelar): ");
+    //     List<Paciente> pacientes = pacienteDAO.getAll();
+    //     exibirPacientes(pacientes);
+    //     int pacienteEscolhido = obterOpcaoUsuario();
+
+    //     if (pacienteEscolhido == 0) {
+    //         System.out.println("Agendamento cancelado.");
+    //         return;
+    //     }
+
+    //     Paciente paciente = pacientes.get(pacienteEscolhido - 1);
+
+    //     System.out.print("Escolha o médico (Digite o ID ou 0 para cancelar): ");
+    //     List<Medico> medicos = medicoDAO.getAll();
+    //     exibirMedicos(medicos);
+    //     int medicoEscolhido = obterOpcaoUsuario();
+
+    //     if (medicoEscolhido == 0) {
+    //         System.out.println("Agendamento cancelado.");
+    //         return;
+    //     }
+
+    //     Medico medico = medicos.get(medicoEscolhido - 1);
+
+    //     // Verifica se o médico possui uma unidade vinculada
+    //     if (medico.getUnidadeVinculada() == null) {
+    //         System.out.println("O médico selecionado não está vinculado a nenhuma unidade.");
+    //         return;
+    //     }
+
+    //     LocalDate dataConsulta = obterDataConsulta();
+    //     LocalTime horaConsulta = obterHorario("hora da consulta (HH:mm)");
+
+    //     System.out.print("Digite o tipo de consulta (ROTINA, CIRURGIA, RETORNO): ");
+    //     Agendamento.TipoConsulta tipoConsulta;
+    //     while (true) {
+    //         try {
+    //             tipoConsulta = Agendamento.TipoConsulta.valueOf(scanner.nextLine().toUpperCase());
+    //             break;
+    //         } catch (IllegalArgumentException e) {
+    //             System.out.println("Tipo de consulta inválido! Tente novamente.");
+    //         }
+    //     }
+
+    //     Agendamento agendamento = tipoConsulta == Agendamento.TipoConsulta.CIRURGIA
+    //             ? new Agendamento(0, medico.getUnidadeVinculada(), paciente, medico, dataConsulta, horaConsulta,
+    //                     tipoConsulta, "Local Cirurgia")
+    //             : new Agendamento(0, medico.getUnidadeVinculada(), paciente, medico, dataConsulta, horaConsulta,
+    //                     tipoConsulta);
+
+    //     agendamentoDAO.inserirAgendamento(agendamento);
+    //     System.out.println("Consulta agendada com sucesso!");
+    // }
 
     // Método auxiliar para exibir pacientes
     private static void exibirPacientes(List<Paciente> pacientes) {

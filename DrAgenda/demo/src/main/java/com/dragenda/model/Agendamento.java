@@ -15,7 +15,7 @@ public class Agendamento {
 
     // Enum para os tipos de consulta
     public enum TipoConsulta {
-        ROTINA, CIRURGIA, RETORNO
+       A, ROTINA, CIRURGIA, RETORNO
     }
 
     // Construtor principal
@@ -45,7 +45,9 @@ public class Agendamento {
     private void validarDataHoraConsulta() {
         // Validação do dia da semana
         String diaSemana = dataConsulta.getDayOfWeek().name().toUpperCase(); // Obtém o nome do dia da semana em maiúsculo
-        if (!unidade.getDiasFuncionamento().contains(diaSemana)) {
+        if (unidade.getDiasFuncionamento().contains(diaSemana)) {// Verifica se o dia da semana está na lista de dias de funcionamento
+            System.out.println("Dia da semana válido.");
+        } else {
             throw new IllegalArgumentException("A unidade não funciona no dia " + diaSemana + ".");
         }
 

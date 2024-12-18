@@ -1,37 +1,29 @@
 package com.dragenda.util;
+
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
-    private static final String URL = "jdbc:mysql://host:port/nome_banco";
-    private static final String USER = "usuario";
-    private static final String PASSWORD = "senha";
+    // Carrega as variáveis do .env
+    private static final Dotenv dotenv = Dotenv.load();
+    private static final String URL = dotenv.get("DB_URL");
+    private static final String USER = dotenv.get("DB_USER");
+    private static final String PASSWORD = dotenv.get("DB_PASSWORD");
 
-    // Método para obter a conexão com o banco de dados
     public static Connection getConnection() {
         try {
-            // Carregar o driver MySQL
+            // Carrega o driver JDBC (opcional para Java 8+)
             Class.forName("com.mysql.cj.jdbc.Driver");
-            // Estabelecer a conexão
+
+            // Conecta ao banco de dados
             return DriverManager.getConnection(URL, USER, PASSWORD);
-        } catch (ClassNotFoundException | SQLException e) {
-            throw new RuntimeException("Erro ao obter a conexão com o banco de dados: " + e.getMessage(), e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Driver MySQL não encontrado", e);
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao obter a conexão com o banco de dados", e);
         }
     }
 }
-
-
-
-
-// import java.sql.Connection;
-// import java.sql.DriverManager;
-// import java.sql.SQLException;
-
-// public class DatabaseConnection {
-//     private static final String URL = "jdbc:sqlite:clinicas.db"; // Nome do arquivo do banco de dados
-
-//     public static Connection getConnection() throws SQLException {
-//         return DriverManager.getConnection(URL);
-//     }
-// }

@@ -1,19 +1,25 @@
 package com.dragenda.dao;
 
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.dragenda.model.Agendamento;
 import com.dragenda.model.Medico;
 import com.dragenda.model.Paciente;
 import com.dragenda.model.Unidade;
 import com.dragenda.util.DatabaseConnection;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-
 public class AgendamentoDAO {
     // Método para inserir um novo agendamento
     public void inserirAgendamento(Agendamento agendamento) {
-        String sql = "INSERT INTO agendamentos (unidade_id, paciente_id, medico_id, data_consulta, hora_consulta, tipo_consulta, local_cirurgia) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Agendamentos (unidade_id, paciente_id, medico_id, data_consulta, hora_consulta, tipo_consulta, local_cirurgia) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -48,18 +54,25 @@ public class AgendamentoDAO {
         }
     }
 
-    // Método para buscar todos os agendamentos
+    // Método para buscar todos os Agendamentos
     public List<Agendamento> buscarAgendamentos() {
-        String sql = "SELECT a.id, a.data_consulta, a.hora_consulta, a.tipo_consulta, a.local_cirurgia, "
-                   + "u.id AS unidade_id, u.nome AS unidade_nome, "
-                   + "p.id AS paciente_id, p.nomeCompleto AS paciente_nome, "
-                   + "m.id AS medico_id, m.nomeCompleto AS medico_nome "
-                   + "FROM agendamentos a "
-                   + "JOIN unidades u ON a.unidade_id = u.id "
-                   + "JOIN pacientes p ON a.paciente_id = p.id "
-                   + "JOIN medicos m ON a.medico_id = m.id";
+         String sql ="SELECT Agendamentos.id AS agendamento_id, " +
+                 "Unidade.nome AS unidade_nome, " +
+                 "Paciente.nome AS paciente_nome, " +
+                 "Medico.nome AS medico_nome, " +
+                 "Agendamentos.data_consulta, " +
+                 "Agendamentos.hora_consulta, " +
+                 "Agendamentos.tipo_consulta " +
+                 "FROM Agendamentos " +
+                 "JOIN Unidade ON Agendamentos.unidade_id = Unidade.id " +
+                 "JOIN Paciente ON Agendamentos.paciente_id = Paciente.id " +
+                 "JOIN Medico ON Agendamentos.medico_id = Medico.id";
+         // "SELECT * FROM Agendamentos " +
+        //              "JOIN Unidade ON Agendamentos.unidade_id = unidade_id " +
+        //              "JOIN Paciente ON Agendamentos.paciente_id = paciente_id " +
+        //              "JOIN Medico ON Agendamentos.medico_id = medico_id";
 
-        List<Agendamento> agendamentos = new ArrayList<>();
+        List<Agendamento> Agendamentos = new ArrayList<>();
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -69,7 +82,7 @@ public class AgendamentoDAO {
                 // Criar objetos Unidade, Paciente e Médico a partir do ResultSet
                 Unidade unidade = new Unidade(
                         rs.getInt("unidade_id"),
-                        rs.getString("unidade_nome"),
+                        rs.getString("unidade_nome"), // Nome da unidade
                         "", // Endereço não está sendo buscado
                         null, // Horário de abertura não está sendo buscado
                         null, // Horário de fechamento não está sendo buscado
@@ -102,18 +115,18 @@ public class AgendamentoDAO {
                         rs.getString("local_cirurgia")
                 );
 
-                agendamentos.add(agendamento);
+                Agendamentos.add(agendamento);// Adiciona o agendamento à lista
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar agendamentos: " + e.getMessage(), e);
+            throw new RuntimeException("Erro ao buscar Agendamentos: " + e.getMessage(), e);
         }
 
-        return agendamentos;
+        return Agendamentos;
     }
 
     // Método para atualizar um agendamento
     public void atualizarAgendamento(Agendamento agendamento) {
-        String sql = "UPDATE agendamentos SET unidade_id = ?, paciente_id = ?, medico_id = ?, data_consulta = ?, hora_consulta = ?, tipo_consulta = ?, local_cirurgia = ? WHERE id = ?";
+        String sql = "UPDATE Agendamentos SET unidade_id = ?, paciente_id = ?, medico_id = ?, data_consulta = ?, hora_consulta = ?, tipo_consulta = ?, local_cirurgia = ? WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -135,7 +148,7 @@ public class AgendamentoDAO {
 
     // Método para deletar um agendamento pelo ID
     public void deletarAgendamento(int id) {
-        String sql = "DELETE FROM agendamentos WHERE id = ?";
+        String sql = "DELETE FROM Agendamentos WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {

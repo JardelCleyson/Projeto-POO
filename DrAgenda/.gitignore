@@ -48,4 +48,5 @@ nbdist/
 # VS Code specific files
 .vscode/
 # db
+.env
 clinicas.db

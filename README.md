@@ -11,7 +11,7 @@ A estrutura do sistema foi organizada em camadas distintas para facilitar a manu
 ## Principais Funcionalidades
 
 1. **Cadastro de Pacientes e Médicos:**
-   - Permite o registro de informações pessoais, como nome, CPF, especialidade médica (para médicos) e histórico médico (para pacientes).
+   - Permite o registro de informações pessoais, como nome, CPF, especialidade médica (para médicos).
 
 2. **Gerenciamento de Unidades de Saúde:**
    - Armazena informações sobre as unidades, como endereço, horário e dias de funcionamento.
@@ -20,7 +20,7 @@ A estrutura do sistema foi organizada em camadas distintas para facilitar a manu
    - Facilita a marcação de consultas médicas, vinculando médicos, pacientes e unidades, respeitando horários disponíveis.
 
 4. **Histórico de Consultas:**
-   - Mantém registros detalhados das consultas realizadas, incluindo patologias diagnosticadas e datas de atendimento.
+   - Mantém registros das consultas realizadas, datas de atendimento, também possibilitando incluir patologias diagnosticadas.
 
 5. **Conexão com Banco de Dados:**
    - Gerencia a persistência de dados utilizando classes para conexão e inicialização do banco de dados.

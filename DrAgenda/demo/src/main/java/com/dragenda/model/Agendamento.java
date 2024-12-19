@@ -53,7 +53,7 @@ public class Agendamento {
     }
 
     @Override
-    public String toString() {
+    public String toString() { // Método para exibir informações do agendamento
         return "Agendamento{" +
                 "id=" + id +
                 ", unidade=" + unidade +

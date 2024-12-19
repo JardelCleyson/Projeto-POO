@@ -20,14 +20,14 @@ public class Medico extends Pessoa {
         return "MÉDICO";
     }
 
-    private void validarCRM(String crm) {
+    private void validarCRM(String crm) { // Método para validar o CRM
         if (crm == null || crm.isEmpty()) {
             throw new IllegalArgumentException("CRM inválido.");
         }
     }
 
     @Override
-    public String toString() {
+    public String toString() { // Método toString modificado
         return "Medico{" +
                 "id=" + id +
                 ", nomeCompleto='" + getNomeCompleto() + '\'' +

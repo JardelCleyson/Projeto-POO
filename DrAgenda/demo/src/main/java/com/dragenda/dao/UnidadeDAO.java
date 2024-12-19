@@ -10,7 +10,7 @@ import java.util.List;
 import com.dragenda.model.Unidade;
 import com.dragenda.util.DatabaseConnection;
 
-public class UnidadeDAO {
+public class UnidadeDAO { // Classe DAO para manipulação de unidades no banco de dados
     public void add(Unidade unidade) {
         String sql = "INSERT INTO Unidade (nome, endereco, horario_abertura, horario_fechamento, dias_funcionamento) VALUES (?, ?, ?, ?, ?)";
 
@@ -27,7 +27,7 @@ public class UnidadeDAO {
         }
     }
 
-    public List<Unidade> getAll() {
+    public List<Unidade> getAll() { // Método para buscar todas as unidades
         List<Unidade> unidades = new ArrayList<>();
         String sql = "SELECT * FROM Unidade";
 

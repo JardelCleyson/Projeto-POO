@@ -3,7 +3,7 @@ package com.dragenda.model;
 import java.time.LocalTime;
 import java.util.List;
 
-public class Unidade {
+public class Unidade { // Classe para representar uma unidade de atendimento
     private int id;
     private String nome;
     private String endereco;
@@ -41,7 +41,7 @@ public class Unidade {
 
     // Sobrescrevendo o método toString()
     @Override
-    public String toString() {
+    public String toString() { 
         return "Unidade{" + // SuppressWarnings("Unknown word")
                 "id=" + id +
                 ", nome='" + nome + '\'' +

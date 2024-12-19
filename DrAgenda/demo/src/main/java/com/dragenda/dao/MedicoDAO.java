@@ -11,7 +11,7 @@ import com.dragenda.model.Medico;
 import com.dragenda.model.Unidade;
 import com.dragenda.util.DatabaseConnection;
 
-public class MedicoDAO {
+public class MedicoDAO { // Classe DAO para manipulação de médicos no banco de dados
     public void add(Medico medico) {
         String sql = "INSERT INTO Medico (nome, cpf, crm, especialidade, unidade_id) VALUES (?, ?, ?, ?, ?)";
 
@@ -28,7 +28,7 @@ public class MedicoDAO {
         }
     }
 
-    public List<Medico> getAll() {
+    public List<Medico> getAll() { // Método para buscar todos os médicos
         List<Medico> medicos = new ArrayList<>();
         String sql = "SELECT * FROM Medico";
 
@@ -54,7 +54,7 @@ public class MedicoDAO {
         return medicos;
     }
 
-    private Unidade findUnidadeById(int id) {
+    private Unidade findUnidadeById(int id) { // Método auxiliar para buscar uma unidade pelo ID
         Unidade unidade = null;
         String sql = "SELECT * FROM Unidade WHERE id = ?";
 

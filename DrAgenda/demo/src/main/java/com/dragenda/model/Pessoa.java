@@ -4,7 +4,7 @@ public abstract class Pessoa {
     private String nomeCompleto;
     private String cpf;
 
-    public Pessoa(String nomeCompleto, String cpf) {
+    public Pessoa(String nomeCompleto, String cpf) { // Construtor da classe Pessoa
         this.nomeCompleto = nomeCompleto;
         this.cpf = cpf;
         validarCPF(cpf);
@@ -22,7 +22,7 @@ public abstract class Pessoa {
     }
     
     @Override
-    public String toString() {
+    public String toString() { 
         return "Pessoa{" +
                 "nomeCompleto='" + nomeCompleto + '\'' +
                 ", cpf='" + cpf + '\'' +

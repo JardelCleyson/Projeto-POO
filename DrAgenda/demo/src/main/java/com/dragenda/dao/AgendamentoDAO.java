@@ -57,7 +57,7 @@ public class AgendamentoDAO {
 
 
 
-    public List<Agendamento> buscarAgendamentos() {
+    public List<Agendamento> buscarAgendamentos() {// Método para buscar todos os agendamentos
     String sql = "SELECT Agendamentos.id AS agendamento_id, " +
                  "Unidade.id AS unidade_id, Unidade.nome AS unidade_nome, Unidade.endereco AS unidade_endereco, " +
                  "Unidade.horario_abertura, Unidade.horario_fechamento, Unidade.dias_funcionamento, " +
@@ -73,7 +73,7 @@ public class AgendamentoDAO {
 
     List<Agendamento> agendamentos = new ArrayList<>();
 
-    try (Connection conn = DatabaseConnection.getConnection();
+    try (Connection conn = DatabaseConnection.getConnection(); 
          PreparedStatement pstmt = conn.prepareStatement(sql);
          ResultSet rs = pstmt.executeQuery()) {
 
@@ -120,7 +120,7 @@ public class AgendamentoDAO {
 
             agendamentos.add(agendamento); // Adicionar à lista
         }
-    } catch (SQLException e) {
+    } catch (SQLException e) { // Tratar exceção
         throw new RuntimeException("Erro ao buscar agendamentos: " + e.getMessage(), e);
     }
 

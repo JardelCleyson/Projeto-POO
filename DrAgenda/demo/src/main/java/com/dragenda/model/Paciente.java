@@ -3,7 +3,7 @@ package com.dragenda.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Paciente extends Pessoa {
+public class Paciente extends Pessoa { // Classe para representar um paciente
     private int id; // Adicionado para ID do paciente
     private Unidade unidadePreferencia;
     private List<String> historicoPatologias;
@@ -27,7 +27,7 @@ public class Paciente extends Pessoa {
     }
 
     @Override
-    public String toString() {
+    public String toString() { // Método toString modificado
         return "Paciente{" +
                 "id=" + id +
                 ", nomeCompleto='" + getNomeCompleto() + '\'' +

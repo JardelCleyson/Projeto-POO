@@ -317,64 +317,7 @@ private static void agendarConsulta() {
         System.out.println("Erro ao agendar consulta. Tente novamente.");
         logger.log(Level.SEVERE, "Erro ao agendar consulta", e);
     }
-}
-
-
-
-    // private static void agendarConsulta() {
-    //     System.out.print("Escolha o paciente (Digite o ID ou 0 para cancelar): ");
-    //     List<Paciente> pacientes = pacienteDAO.getAll();
-    //     exibirPacientes(pacientes);
-    //     int pacienteEscolhido = obterOpcaoUsuario();
-
-    //     if (pacienteEscolhido == 0) {
-    //         System.out.println("Agendamento cancelado.");
-    //         return;
-    //     }
-
-    //     Paciente paciente = pacientes.get(pacienteEscolhido - 1);
-
-    //     System.out.print("Escolha o médico (Digite o ID ou 0 para cancelar): ");
-    //     List<Medico> medicos = medicoDAO.getAll();
-    //     exibirMedicos(medicos);
-    //     int medicoEscolhido = obterOpcaoUsuario();
-
-    //     if (medicoEscolhido == 0) {
-    //         System.out.println("Agendamento cancelado.");
-    //         return;
-    //     }
-
-    //     Medico medico = medicos.get(medicoEscolhido - 1);
-
-    //     // Verifica se o médico possui uma unidade vinculada
-    //     if (medico.getUnidadeVinculada() == null) {
-    //         System.out.println("O médico selecionado não está vinculado a nenhuma unidade.");
-    //         return;
-    //     }
-
-    //     LocalDate dataConsulta = obterDataConsulta();
-    //     LocalTime horaConsulta = obterHorario("hora da consulta (HH:mm)");
-
-    //     System.out.print("Digite o tipo de consulta (ROTINA, CIRURGIA, RETORNO): ");
-    //     Agendamento.TipoConsulta tipoConsulta;
-    //     while (true) {
-    //         try {
-    //             tipoConsulta = Agendamento.TipoConsulta.valueOf(scanner.nextLine().toUpperCase());
-    //             break;
-    //         } catch (IllegalArgumentException e) {
-    //             System.out.println("Tipo de consulta inválido! Tente novamente.");
-    //         }
-    //     }
-
-    //     Agendamento agendamento = tipoConsulta == Agendamento.TipoConsulta.CIRURGIA
-    //             ? new Agendamento(0, medico.getUnidadeVinculada(), paciente, medico, dataConsulta, horaConsulta,
-    //                     tipoConsulta, "Local Cirurgia")
-    //             : new Agendamento(0, medico.getUnidadeVinculada(), paciente, medico, dataConsulta, horaConsulta,
-    //                     tipoConsulta);
-
-    //     agendamentoDAO.inserirAgendamento(agendamento);
-    //     System.out.println("Consulta agendada com sucesso!");
-    // }
+}  
 
     // Método auxiliar para exibir pacientes
     private static void exibirPacientes(List<Paciente> pacientes) {

@@ -125,78 +125,7 @@ public class AgendamentoDAO {
     }
 
     return agendamentos;
-}
-
-    // Método para buscar todos os Agendamentos
-    // public List<Agendamento> buscarAgendamentos() {
-    //      String sql =
-    //      "SELECT Agendamentos.id AS agendamento_id, " +
-    //              "Unidade.nome AS unidade_nome, " +
-    //              "Paciente.nome AS paciente_nome, " +
-    //              "Medico.nome AS medico_nome, " +
-    //              "Agendamentos.data_consulta, " +
-    //              "Agendamentos.hora_consulta, " +
-    //              "Agendamentos.tipo_consulta " +
-    //              "FROM Agendamentos " +
-    //              "JOIN Unidade ON Agendamentos.unidade_id = Unidade.id " +
-    //              "JOIN Paciente ON Agendamentos.paciente_id = Paciente.id " +
-    //              "JOIN Medico ON Agendamentos.medico_id = Medico.id";
-    //      // "SELECT * FROM Agendamentos " +
-    //     //              "JOIN Unidade ON Agendamentos.unidade_id = unidade_id " +
-    //     //              "JOIN Paciente ON Agendamentos.paciente_id = paciente_id " +
-    //     //              "JOIN Medico ON Agendamentos.medico_id = medico_id";
-
-    //     List<Agendamento> Agendamentos = new ArrayList<>();
-        
-    //     try (Connection conn = DatabaseConnection.getConnection();
-    //          PreparedStatement pstmt = conn.prepareStatement(sql);
-    //          ResultSet rs = pstmt.executeQuery()) {
-            
-    //         while (rs.next()) {
-    //             // Criar objetos Unidade, Paciente e Médico a partir do ResultSet
-    //             Unidade unidade = new Unidade(
-    //                     rs.getInt("unidade_id"),
-    //                     rs.getString("unidade_nome"), // Nome da unidade
-    //                     "", // Endereço não está sendo buscado
-    //                     null, // Horário de abertura não está sendo buscado
-    //                     null, // Horário de fechamento não está sendo buscado
-    //                     null // Dias de funcionamento não estão sendo buscados
-    //             );
-    //             Paciente paciente = new Paciente(
-    //                     rs.getInt("paciente_id"),
-    //                     rs.getString("paciente_nome"),
-    //                     "", // CPF não está sendo buscado
-    //                     unidade // A unidade preferida
-    //             );
-    //             Medico medico = new Medico(
-    //                     rs.getInt("medico_id"),
-    //                     rs.getString("medico_nome"),
-    //                     "", // CPF não está sendo buscado
-    //                     "", // CRM não está sendo buscado
-    //                     "", // Especialidade não está sendo buscada
-    //                     unidade // A unidade vinculada
-    //             );
-
-    //             // Criar o agendamento
-    //             Agendamento agendamento = new Agendamento(
-    //                     rs.getInt("id"),
-    //                     unidade,
-    //                     paciente,
-    //                     medico,
-    //                     rs.getDate("data_consulta").toLocalDate(),
-    //                     rs.getTime("hora_consulta").toLocalTime(),
-    //                     Agendamento.TipoConsulta.valueOf(rs.getString("tipo_consulta")),
-    //                     rs.getString("local_cirurgia")
-    //             );
-
-    //             Agendamentos.add(agendamento);// Adiciona o agendamento à lista
-    //         }
-    //     } catch (SQLException e) {
-    //         throw new RuntimeException("Erro ao buscar Agendamentos: " + e.getMessage(), e);
-    //     }
-
-    //     return Agendamentos;
-    // }
+}  
 
     // Método para atualizar um agendamento
     public void atualizarAgendamento(Agendamento agendamento) {

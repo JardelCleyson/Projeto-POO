@@ -1,8 +1,12 @@
-import static org.junit.jupiter.api.Assertions.*;
+package com.dragenda.model;
+import java.time.LocalTime;
+import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-package com.dragenda.model;
 
 
 public class MedicoTest {
@@ -12,8 +16,8 @@ public class MedicoTest {
 
     @BeforeEach
     public void setUp() {
-        unidade = new Unidade("Hospital Central");
-        medico = new Medico(1, "Dr. John Doe", "123.456.789-00", "CRM12345", "Cardiologia", unidade);
+        unidade = new Unidade(5, "teste", "address", LocalTime.of(9, 0), LocalTime.of(17, 0), new ArrayList<>());
+        medico = new Medico(5, "Dr. John Doe", "123.456.789-00", "CRM12345", "Cardiologia", unidade);
     }
 
     @Test
@@ -23,9 +27,10 @@ public class MedicoTest {
 
     @Test
     public void testValidarCRM() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Medico(2, "Dr. Jane Doe", "987.654.321-00", "", "Pediatria", unidade);
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            medico = new Medico(4, "Dr. Jane Doe", "987.654.321-00", "", "Pediatria", unidade);
         });
+        assertEquals("CRM cannot be empty", exception.getMessage());
     }
 
     @Test
@@ -36,23 +41,25 @@ public class MedicoTest {
 
     @Test
     public void testSetCrmInvalid() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             medico.setCrm("");
         });
+        assertEquals("CRM cannot be empty", exception.getMessage());
     }
 
     @Test
     public void testSetUnidadeVinculada() {
-        Unidade novaUnidade = new Unidade("Clínica Nova");
+        Unidade novaUnidade = new Unidade(2, "Clínica Nova", "new address", LocalTime.of(8, 0), LocalTime.of(18, 0), new ArrayList<>());
         medico.setUnidadeVinculada(novaUnidade);
         assertEquals(novaUnidade, medico.getUnidadeVinculada());
     }
 
     @Test
     public void testSetUnidadeVinculadaNull() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             medico.setUnidadeVinculada(null);
         });
+        assertEquals("Unidade cannot be null", exception.getMessage());
     }
 
     @Test

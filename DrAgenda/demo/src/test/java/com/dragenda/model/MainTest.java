@@ -1,6 +1,4 @@
-package com.dragenda.view;
-
-import java.sql.Connection;
+package com.dragenda.model;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -16,12 +14,7 @@ import com.dragenda.dao.AgendamentoDAO;
 import com.dragenda.dao.MedicoDAO;
 import com.dragenda.dao.PacienteDAO;
 import com.dragenda.dao.UnidadeDAO;
-import com.dragenda.model.Agendamento;
-import com.dragenda.model.Medico;
-import com.dragenda.model.Paciente;
-import com.dragenda.model.Unidade;
 import com.dragenda.util.DatabaseConnection;
-import com.dragenda.util.DatabaseInitializer;
 
 class MainTest {
 
@@ -32,8 +25,7 @@ class MainTest {
 
     @BeforeAll
     static void setUp() throws SQLException {
-        Connection connection = DatabaseConnection.getConnection();
-        DatabaseInitializer.initializeDatabase();
+        DatabaseConnection.getConnection();
         unidadeDAO = new UnidadeDAO();
         medicoDAO = new MedicoDAO();
         pacienteDAO = new PacienteDAO();

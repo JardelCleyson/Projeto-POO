@@ -1,9 +1,12 @@
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+package com.dragenda.model;
+import java.time.LocalTime;
 import java.util.List;
 
-package com.dragenda.model;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 
 
@@ -14,8 +17,8 @@ public class PacienteTest {
 
     @BeforeEach
     public void setUp() {
-        unidade = new Unidade("Unidade Teste");
-        paciente = new Paciente(1, "Nome Completo", "123.456.789-00", unidade);
+        unidade = new Unidade(1, "Teste 4", "Endereco Teste", LocalTime.of(8, 0), LocalTime.of(18, 0), List.of("Serviço 1", "Serviço 2"));
+        paciente = new Paciente(1, "Jose Silva", "12345678900", unidade);
     }
 
     @Test
@@ -49,7 +52,7 @@ public class PacienteTest {
 
     @Test
     public void testSetUnidadePreferencia() {
-        Unidade novaUnidade = new Unidade("Nova Unidade");
+        Unidade novaUnidade = new Unidade(2, "Nova Unidade", "Endereco Nova", LocalTime.of(9, 0), LocalTime.of(17, 0), List.of("Serviço 3", "Serviço 4"));
         paciente.setUnidadePreferencia(novaUnidade);
         assertEquals(novaUnidade, paciente.getUnidadePreferencia());
     }

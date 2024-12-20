@@ -1,6 +1,7 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project 
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.dragenda</groupId>
@@ -13,18 +14,16 @@
     </properties>
 
     <dependencies>
-        <!-- Dependência para MySQL Connector -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.33</version> <!-- Última versão estável -->
+            <version>8.0.33</version>
         </dependency>
 
-        <!-- Dependências para JUnit 5 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.10.0</version> <!-- Versão atualizada para 2024 -->
+            <version>5.10.0</version> 
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -34,56 +33,55 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Dependência para dotenv-java -->
         <dependency>
             <groupId>io.github.cdimascio</groupId>
             <artifactId>dotenv-java</artifactId>
             <version>3.0.0</version>
         </dependency>
 
-        <!-- Dependência para Mockito -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>5.3.1</version> <!-- Versão estável -->
+            <version>5.3.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!-- Plugin para compilar com Java 17 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version> <!-- Última versão -->
+                <version>3.11.0</version>
                 <configuration>
                     <release>17</release>
                 </configuration>
             </plugin>
 
-            <!-- Plugin para executar a aplicação -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>3.1.0</version> <!-- Atualização para versão mais recente -->
+                <version>3.1.0</version> 
                 <configuration>
                     <mainClass>${exec.mainClass}</mainClass>
                 </configuration>
             </plugin>
 
-            <!-- Plugin para execução de testes -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.1.2</version> <!-- Versão estável em 2024 -->
+                <version>3.1.2</version>
+                <configuration>
+                    <includes>
+                        <include>**/*Test.java</include> 
+                    </includes>
+                </configuration>
             </plugin>
 
-            <!-- Plugin para JaCoCo -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.8</version> <!-- Última versão estável -->
+                <version>0.8.8</version> 
                 <executions>
                     <execution>
                         <goals>

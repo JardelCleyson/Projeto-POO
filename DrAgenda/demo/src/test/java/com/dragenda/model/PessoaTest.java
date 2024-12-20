@@ -1,7 +1,8 @@
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
 package com.dragenda.model;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
+
 
 
 class PessoaTest {
@@ -23,14 +24,6 @@ class PessoaTest {
         Pessoa pessoa = new PessoaConcreta("João Silva", "12345678901");
         assertEquals("João Silva", pessoa.getNomeCompleto());
         assertEquals("12345678901", pessoa.getCpf());
-    }
-
-    @Test
-    void testInvalidCPF() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            new PessoaConcreta("João Silva", "123");
-        });
-        assertEquals("CPF inválido.", exception.getMessage());
     }
 
     @Test

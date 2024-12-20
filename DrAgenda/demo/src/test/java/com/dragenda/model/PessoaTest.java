@@ -1,9 +1,8 @@
 package com.dragenda.model;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
-
-
 
 class PessoaTest {
 
@@ -19,6 +18,7 @@ class PessoaTest {
         }
     }
 
+    // Teste para verificar a criação de uma instância de Pessoa
     @Test
     void testPessoaCreation() {
         Pessoa pessoa = new PessoaConcreta("João Silva", "12345678901");
@@ -26,6 +26,7 @@ class PessoaTest {
         assertEquals("12345678901", pessoa.getCpf());
     }
 
+    // Teste para verificar a alteração do nome completo de uma Pessoa
     @Test
     void testSetNomeCompleto() {
         Pessoa pessoa = new PessoaConcreta("João Silva", "12345678901");
@@ -33,6 +34,7 @@ class PessoaTest {
         assertEquals("Maria Oliveira", pessoa.getNomeCompleto());
     }
 
+    // Teste para verificar a alteração do CPF de uma Pessoa
     @Test
     void testSetCpf() {
         Pessoa pessoa = new PessoaConcreta("João Silva", "12345678901");
@@ -40,6 +42,7 @@ class PessoaTest {
         assertEquals("10987654321", pessoa.getCpf());
     }
 
+    // Teste para verificar a exceção ao definir um CPF inválido
     @Test
     void testSetInvalidCpf() {
         Pessoa pessoa = new PessoaConcreta("João Silva", "12345678901");

@@ -1,4 +1,5 @@
 package com.dragenda.util;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -16,12 +17,11 @@ import static org.mockito.Mockito.when;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
-
-
 public class DatabaseConnectionTest {
 
     private static Dotenv dotenvMock;
 
+    // Método de configuração que é executado antes de todos os testes
     @BeforeAll
     public static void setup() {
         dotenvMock = mock(Dotenv.class);
@@ -30,6 +30,7 @@ public class DatabaseConnectionTest {
         when(dotenvMock.get("DB_PASSWORD")).thenReturn("testpassword");
     }
 
+    // Teste para verificar se a conexão com o banco de dados é bem-sucedida
     @Test
     public void testGetConnectionSuccess() {
         try (MockedStatic<Dotenv> mockedDotenv = Mockito.mockStatic(Dotenv.class);
@@ -46,6 +47,7 @@ public class DatabaseConnectionTest {
         }
     }
 
+    // Teste para verificar se uma exceção ClassNotFoundException é lançada
     @Test
     public void testGetConnectionClassNotFoundException() {
         try (MockedStatic<Dotenv> mockedDotenv = Mockito.mockStatic(Dotenv.class)) {
@@ -63,6 +65,7 @@ public class DatabaseConnectionTest {
         }
     }
 
+    // Teste para verificar se uma exceção SQLException é lançada
     @Test
     public void testGetConnectionSQLException() {
         try (MockedStatic<Dotenv> mockedDotenv = Mockito.mockStatic(Dotenv.class);

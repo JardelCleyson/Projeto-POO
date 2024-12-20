@@ -25,6 +25,7 @@ class MainTest {
 
     @BeforeAll
     static void setUp() throws SQLException {
+        // Configura a conexão com o banco de dados e inicializa os DAOs
         DatabaseConnection.getConnection();
         unidadeDAO = new UnidadeDAO();
         medicoDAO = new MedicoDAO();
@@ -44,6 +45,7 @@ class MainTest {
         Unidade unidade = new Unidade(nome, endereco, horarioAbertura, horarioFechamento, diasFuncionamento);
         unidadeDAO.add(unidade);
 
+        // Verifica se a unidade foi cadastrada corretamente
         assertNotNull(unidadeDAO.getAll());
         assertEquals(1, unidadeDAO.getAll().size());
         assertEquals(nome, unidadeDAO.getAll().get(0).getNome());
@@ -52,12 +54,13 @@ class MainTest {
     @Test
     void testCadastrarMedico() {
         // Testa o cadastro de um médico
-        Unidade unidade = new Unidade("Unidade A", "Endereço A", null, null, List.of());
+        Unidade unidade = new Unidade("Unidade A", "Endereço A", LocalTime.of(8, 0), LocalTime.of(18, 0), List.of());
         unidadeDAO.add(unidade);
 
         Medico medico = new Medico(0, "Dr. Teste", "12345678901", "CRM123", "Cardiologia", unidade);
         medicoDAO.add(medico);
 
+        // Verifica se o médico foi cadastrado corretamente
         assertNotNull(medicoDAO.getAll());
         assertEquals(1, medicoDAO.getAll().size());
         assertEquals("Dr. Teste", medicoDAO.getAll().get(0).getNomeCompleto());
@@ -66,12 +69,13 @@ class MainTest {
     @Test
     void testCadastrarPaciente() {
         // Testa o cadastro de um paciente
-        Unidade unidade = new Unidade("Unidade B", "Endereço B", null, null, List.of());
+        Unidade unidade = new Unidade("Unidade B", "Endereço B", LocalTime.of(8, 0), LocalTime.of(18, 0), List.of());
         unidadeDAO.add(unidade);
 
         Paciente paciente = new Paciente(0, "Paciente Teste", "12345678901", unidade);
         pacienteDAO.add(paciente);
 
+        // Verifica se o paciente foi cadastrado corretamente
         assertNotNull(pacienteDAO.getAll());
         assertEquals(1, pacienteDAO.getAll().size());
         assertEquals("Paciente Teste", pacienteDAO.getAll().get(0).getNomeCompleto());
@@ -80,7 +84,7 @@ class MainTest {
     @Test
     void testAgendarConsulta() {
         // Testa o agendamento de uma consulta
-        Unidade unidade = new Unidade("Unidade C", "Endereço C", null, null, List.of());
+        Unidade unidade = new Unidade("Unidade C", "Endereço C", LocalTime.of(8, 0), LocalTime.of(18, 0), List.of());
         unidadeDAO.add(unidade);
 
         Medico medico = new Medico(0, "Dr. Agendador", "12345678901", "CRM456", "Pediatria", unidade);
@@ -89,11 +93,12 @@ class MainTest {
         Paciente paciente = new Paciente(0, "Paciente Agendado", "12345678901", unidade);
         pacienteDAO.add(paciente);
 
-        LocalDate dataConsulta = LocalDate.of(2024, 10, 30);
+        LocalDate dataConsulta = LocalDate.now().plusDays(1);
         LocalTime horaConsulta = LocalTime.of(10, 0);
         Agendamento agendamento = new Agendamento(0, unidade, paciente, medico, dataConsulta, horaConsulta, Agendamento.TipoConsulta.ROTINA);
         agendamentoDAO.inserirAgendamento(agendamento);
 
+        // Verifica se o agendamento foi realizado corretamente
         assertNotNull(agendamentoDAO.buscarAgendamentos());
         assertEquals(1, agendamentoDAO.buscarAgendamentos().size());
         assertEquals(paciente.getNomeCompleto(), agendamentoDAO.buscarAgendamentos().get(0).getPaciente().getNomeCompleto());

@@ -15,6 +15,7 @@ public class AgendamentoTest {
     private Paciente paciente;
     private Medico medico;
 
+    // Método que é executado antes de cada teste para configurar os objetos necessários
     @BeforeEach
     public void setUp() {
         unidade = new Unidade(1, "Unidade A", "Endereço A", LocalTime.of(8, 0), LocalTime.of(18, 0), Arrays.asList("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"));
@@ -26,9 +27,10 @@ public class AgendamentoTest {
         medico = new Medico(1, "Medico A", "98765432121", "12354", "Especialidade A", unidade);
     }
 
+    // Teste para verificar se um agendamento válido é criado corretamente
     @Test
     public void testAgendamentoValido() {
-        LocalDate dataConsulta = LocalDate.of(2023, 10, 2); // Monday
+        LocalDate dataConsulta = LocalDate.of(2025, 10, 2); // Segunda-feira
         LocalTime horaConsulta = LocalTime.of(10, 0);
 
         Agendamento agendamento = new Agendamento(1, unidade, paciente, medico, dataConsulta, horaConsulta, Agendamento.TipoConsulta.ROTINA);
@@ -42,22 +44,24 @@ public class AgendamentoTest {
         assertEquals(Agendamento.TipoConsulta.ROTINA, agendamento.getTipoConsulta());
     }
 
+    // Teste para verificar se um agendamento em um dia inválido lança uma exceção
     @Test
     public void testAgendamentoInvalidoDiaSemana() {
-        LocalDate dataConsulta = LocalDate.of(2023, 10, 1); // Sunday
+        LocalDate dataConsulta = LocalDate.of(2025, 10, 1); 
         LocalTime horaConsulta = LocalTime.of(10, 0);
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            new Agendamento(1, unidade, paciente, medico, dataConsulta, horaConsulta, Agendamento.TipoConsulta.ROTINA);
+            Agendamento agendamento = new Agendamento(1, unidade, paciente, medico, dataConsulta, horaConsulta, Agendamento.TipoConsulta.ROTINA);
         });
 
         assertEquals("A unidade não funciona no dia SUNDAY.", exception.getMessage());
     }
 
+    // Teste para verificar se um agendamento fora do horário de funcionamento lança uma exceção
     @Test
     public void testAgendamentoInvalidoHorario() {
-        LocalDate dataConsulta = LocalDate.of(2023, 10, 2); // Monday
-        LocalTime horaConsulta = LocalTime.of(7, 0); // Antes da abertura da unidade
+        LocalDate dataConsulta = LocalDate.of(2025, 10, 2); // Segunda-feira
+        LocalTime horaConsulta = LocalTime.of(1, 0); // Antes da abertura da unidade
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             new Agendamento(1, unidade, paciente, medico, dataConsulta, horaConsulta, Agendamento.TipoConsulta.ROTINA);
@@ -66,9 +70,10 @@ public class AgendamentoTest {
         assertEquals("A consulta deve ser marcada dentro do horário de funcionamento da unidade.", exception.getMessage());
     }
 
+    // Teste para verificar se um agendamento de cirurgia válido é criado corretamente
     @Test
     public void testAgendamentoCirurgiaValido() {
-        LocalDate dataConsulta = LocalDate.of(2023, 10, 2); // Monday
+        LocalDate dataConsulta = LocalDate.of(2025, 10, 2); // Segunda-feira
         LocalTime horaConsulta = LocalTime.of(10, 0);
         String localCirurgia = "Sala 1";
 
@@ -84,15 +89,16 @@ public class AgendamentoTest {
         assertEquals(localCirurgia, agendamento.getLocalCirurgia());
     }
 
+    // Teste para verificar se um agendamento de cirurgia inválido lança uma exceção
     @Test
     public void testAgendamentoCirurgiaInvalido() {
-        LocalDate dataConsulta = LocalDate.of(2023, 10, 2); // Monday
+        LocalDate dataConsulta = LocalDate.of(2025, 10, 2); // Segunda-feira
         LocalTime horaConsulta = LocalTime.of(10, 0);
         String localCirurgia = "Sala 1";
 
         // Criando agendamento com tipo ROTINA e local de cirurgia
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            new Agendamento(1, unidade, paciente, medico, dataConsulta, horaConsulta, Agendamento.TipoConsulta.CIRURGIA, localCirurgia);
+            Agendamento agendamento = new Agendamento(1, unidade, paciente, medico, dataConsulta, horaConsulta, Agendamento.TipoConsulta.CIRURGIA, localCirurgia);
         });
 
         assertEquals("Local de cirurgia só pode ser definido para consultas do tipo CIRURGIA.", exception.getMessage());
